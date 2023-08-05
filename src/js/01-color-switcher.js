@@ -29,9 +29,6 @@ function onStartBtnClick() {
 }
 
 function onStopBtnClick() {
-  if (isStopped) {
-    return;
-  }
   isStopped = true;
   refs.stopBtn.setAttribute('disabled', 'disabled'); // деактивуємо кнопку Stop
 }
