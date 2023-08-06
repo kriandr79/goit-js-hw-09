@@ -13,7 +13,7 @@ const refs = {
 
 refs.startBtn.addEventListener('click', onStartBtnClick);
 
-refs.startBtn.setAttribute('disabled', 'disabled'); // деактивуємо кнопку Start
+refs.startBtn.disabled = true; // деактивуємо кнопку Start
 
 const options = {
   enableTime: true,
@@ -26,9 +26,10 @@ const options = {
 
     if (selectedDate.getTime() < currentDate) {
       Notiflix.Notify.failure('Please choose a date in the future');
+      refs.startBtn.disabled = true; // деативуємо кнопку Start
     } else {
       Notiflix.Notify.success('You choose a right date');
-      refs.startBtn.removeAttribute('disabled'); // активуємо кнопку Start
+      refs.startBtn.disabled = false; // активуємо кнопку Start
     }
   },
 };
@@ -36,7 +37,7 @@ const options = {
 flatpickr(refs.input, options);
 
 function onStartBtnClick() {
-  refs.startBtn.setAttribute('disabled', 'disabled'); // деактивуємо кнопку Start
+  refs.startBtn.disabled = true; // деактивуємо кнопку Start
 
   const selectedTime = new Date(
     refs.input._flatpickr.selectedDates[0]
@@ -61,6 +62,10 @@ function onStartBtnClick() {
   }, 1000);
 }
 
+function addLeadingZero(value) {
+  return String(value).padStart(2, '0');
+}
+
 function convertMs(ms) {
   // Number of milliseconds per unit of time
   const second = 1000;
@@ -80,6 +85,4 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
-function addLeadingZero(value) {
-  return String(value).padStart(2, '0');
-}
+
