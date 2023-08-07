@@ -5,6 +5,7 @@ import Notiflix from 'notiflix';
 const refs = {
   input: document.getElementById('datetime-picker'),
   startBtn: document.querySelector('button[data-start]'),
+  resetBtn: document.querySelector('button[data-reset]'),
   days: document.querySelector('span[data-days]'),
   hours: document.querySelector('span[data-hours]'),
   minutes: document.querySelector('span[data-minutes]'),
@@ -14,6 +15,7 @@ const refs = {
 refs.startBtn.addEventListener('click', onStartBtnClick);
 
 refs.startBtn.disabled = true; // деактивуємо кнопку Start
+refs.resetBtn.disabled = true; // деактивуємо кнопку Reset
 
 const options = {
   enableTime: true,
@@ -38,6 +40,10 @@ flatpickr(refs.input, options);
 
 function onStartBtnClick() {
   refs.startBtn.disabled = true; // деактивуємо кнопку Start
+  refs.input.disabled = true; // деактивуємо input
+  refs.resetBtn.disabled = false; // активуємо кнопку Reset
+
+  refs.resetBtn.addEventListener('click', onResetBtnClick);
 
   const selectedTime = new Date(
     refs.input._flatpickr.selectedDates[0]
@@ -51,6 +57,8 @@ function onStartBtnClick() {
     if (deltaTime <= 0) {
       clearInterval(intervalId);
       Notiflix.Notify.info('The time is gone');
+      refs.startBtn.disabled = false; // активуємо кнопку Start
+      refs.input.disabled = false; // активуємо input
       return;
     }
 
@@ -60,6 +68,17 @@ function onStartBtnClick() {
     refs.minutes.textContent = addLeadingZero(minutes);
     refs.seconds.textContent = addLeadingZero(seconds);
   }, 1000);
+
+  function onResetBtnClick() {
+    clearInterval(intervalId);
+    Notiflix.Notify.info('Timer was reset');
+    refs.days.textContent = '00';
+    refs.hours.textContent = '00';
+    refs.minutes.textContent = '00';
+    refs.seconds.textContent = '00';
+    refs.input.disabled = false; // активуємо input
+    refs.resetBtn.disabled = true; // деактивуємо кнопку Reset
+  }
 }
 
 function addLeadingZero(value) {
@@ -84,5 +103,3 @@ function convertMs(ms) {
 
   return { days, hours, minutes, seconds };
 }
-
-

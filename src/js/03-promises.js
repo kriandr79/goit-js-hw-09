@@ -13,6 +13,13 @@ function onFormSubmit(e) {
   const step = Number(e.target.step.value);
   const amount = Number(e.target.amount.value);
 
+  if (delay < 0 || step < 0 || amount <= 0) {
+    Notiflix.Notify.info(
+      `Incorrect parametrs: ${delay}, ${delay}ms, ${amount} `
+    );
+    return;
+  }
+
   for (let i = 1; i <= amount; i += 1) {
     createPromise(i, delay)
       .then(({ position, delay }) => {
@@ -30,7 +37,6 @@ function onFormSubmit(e) {
 }
 
 function createPromise(position, delay) {
-
   const shouldResolve = Math.random() > 0.3;
 
   return new Promise((resolve, reject) => {
